@@ -2,6 +2,11 @@
 
 Sorting Visualization is a graphical application that visualizes various sorting algorithms using SDL (Simple DirectMedia Layer) and SDL_ttf (SDL TrueType Font). The application demonstrates how different sorting algorithms work by providing a visual representation of the sorting process.
 
+## Video Demonstration
+
+https://github.com/Shreyas9699/Sorting-Visualization/assets/63774467/289469fe-c1eb-44be-8ab2-78af8a15dab9
+
+
 ## Features
 
 - Visualizes the following sorting algorithms:
