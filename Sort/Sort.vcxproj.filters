@@ -36,4 +36,7 @@
   <ItemGroup>
     <Font Include="fonts\font.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="Sample\UseCase.mp4" />
+  </ItemGroup>
 </Project>
