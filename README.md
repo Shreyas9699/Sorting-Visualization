@@ -1,6 +1,6 @@
 # Sorting Visualization
 
-Sorting Visualization is a graphical application that visualizes various sorting algorithms using SDL (Simple DirectMedia Layer) and SDL_ttf (SDL TrueType Font). The application demonstrates how different sorting algorithms work by providing a visual representation of the sorting process.
+Sorting Visualization is a graphical application that visualizes various sorting algorithms using SDL (Simple DirectMedia Layer) and SDL_ttf (SDL TrueType Font). The application demonstrates how different sorting algorithms work by providing a visual representation of the sorting process. The latest update introduces multi-threading to separate the sorting and rendering processes, improving performance and responsiveness.
 
 ## Video Demonstration
 
@@ -21,6 +21,7 @@ https://github.com/Shreyas9699/Sorting-Visualization/assets/63774467/289469fe-c1
   - Counting Sort
   - Radix Sort
   - Bucket Sort
+- Allows both positive and negative integers (flag to include negavtive integers)
 - Adjustable number of elements to sort
 - Customizable window size
 - Real-time sorting process visualization

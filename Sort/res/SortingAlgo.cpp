@@ -25,7 +25,15 @@ void SortingAlgo::bubbleSort(Engine* obj)
             {
                 std::swap(obj->m_numbers[j], obj->m_numbers[j + 1]);
             }
-            obj->Draw();
+            {
+                std::lock_guard<std::mutex> lokc(obj->mtx);
+                obj->updateAvailable = true;
+            }
+            obj->cv.notify_all();
+            {
+                std::unique_lock<std::mutex> lock(obj->mtx);
+                obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+            }
         }
     }
 
@@ -54,7 +62,16 @@ void SortingAlgo::selectionSort(Engine* obj)
         obj->m_leftIndex = i;
         obj->m_rightIndex = minIdx;
         std::swap(obj->m_numbers[i], obj->m_numbers[minIdx]);
-        obj->Draw();
+        
+        {
+            std::lock_guard<std::mutex> lokc(obj->mtx);
+            obj->updateAvailable = true;
+        }
+        obj->cv.notify_all();
+        {
+            std::unique_lock<std::mutex> lock(obj->mtx);
+            obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+        }
     }
 
     obj->resetColorIdx();
@@ -79,11 +96,30 @@ void SortingAlgo::insertionSort(Engine* obj)
             obj->m_numbers[j + 1] = obj->m_numbers[j];
             obj->m_leftIndex = j;
             obj->m_rightIndex = j + 1;
-            obj->Draw();
+            
+            {
+                std::lock_guard<std::mutex> lokc(obj->mtx);
+                obj->updateAvailable = true;
+            }
+            obj->cv.notify_all();
+            {
+                std::unique_lock<std::mutex> lock(obj->mtx);
+                obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+            }
+
             j--;
         }
         obj->m_numbers[j + 1] = key;
-        obj->Draw();
+        
+        {
+            std::lock_guard<std::mutex> lokc(obj->mtx);
+            obj->updateAvailable = true;
+        }
+        obj->cv.notify_all();
+        {
+            std::unique_lock<std::mutex> lock(obj->mtx);
+            obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+        }
     }
 
     obj->resetColorIdx();
@@ -120,11 +156,29 @@ void SortingAlgo::binaryInsertionSort(Engine* obj)
             obj->m_numbers[j + 1] = obj->m_numbers[j];
             obj->m_leftIndex = j;
             obj->m_rightIndex = j + 1;
-            obj->Draw();
+            
+            {
+                std::lock_guard<std::mutex> lokc(obj->mtx);
+                obj->updateAvailable = true;
+            }
+            obj->cv.notify_all();
+            {
+                std::unique_lock<std::mutex> lock(obj->mtx);
+                obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+            }
         }
         obj->m_numbers[left] = key;
         obj->m_pivotIndex = left;
-        obj->Draw();
+        
+        {
+            std::lock_guard<std::mutex> lokc(obj->mtx);
+            obj->updateAvailable = true;
+        }
+        obj->cv.notify_all();
+        {
+            std::unique_lock<std::mutex> lock(obj->mtx);
+            obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+        }
     }
 
     obj->resetColorIdx();
@@ -154,11 +208,29 @@ void SortingAlgo::shellSort(Engine* obj)
                 obj->m_numbers[j] = obj->m_numbers[j - gap];
                 obj->m_leftIndex = j;
                 obj->m_rightIndex = j - gap;
-                obj->Draw();
+                
+                {
+                    std::lock_guard<std::mutex> lokc(obj->mtx);
+                    obj->updateAvailable = true;
+                }
+                obj->cv.notify_all();
+                {
+                    std::unique_lock<std::mutex> lock(obj->mtx);
+                    obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+                }
             }
             obj->m_numbers[j] = temp;
             obj->m_pivotIndex = j;
-            obj->Draw();
+            
+            {
+                std::lock_guard<std::mutex> lokc(obj->mtx);
+                obj->updateAvailable = true;
+            }
+            obj->cv.notify_all();
+            {
+                std::unique_lock<std::mutex> lock(obj->mtx);
+                obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+            }
         }
     }
 
@@ -187,7 +259,15 @@ void SortingAlgo::heapify(Engine* obj, std::vector<int>& arr, int n, int i)
         obj->m_leftIndex = i;
         obj->m_rightIndex = largest;
         std::swap(arr[i], arr[largest]);
-        obj->Draw();
+        {
+            std::lock_guard<std::mutex> lokc(obj->mtx);
+            obj->updateAvailable = true;
+        }
+        obj->cv.notify_all();
+        {
+            std::unique_lock<std::mutex> lock(obj->mtx);
+            obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+        }
         heapify(obj, arr, n, largest);
     }
 }
@@ -216,7 +296,15 @@ void SortingAlgo::heapSort(Engine* obj)
         obj->m_leftIndex = 0;
         obj->m_rightIndex = i;
         std::swap(obj->m_numbers[0], obj->m_numbers[i]);
-        obj->Draw();
+        {
+            std::lock_guard<std::mutex> lokc(obj->mtx);
+            obj->updateAvailable = true;
+        }
+        obj->cv.notify_all();
+        {
+            std::unique_lock<std::mutex> lock(obj->mtx);
+            obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+        }
         heapify(obj, obj->m_numbers, i, 0);
     }
 
@@ -240,12 +328,28 @@ int SortingAlgo::partition(Engine* obj, std::vector<int>& arr, int low, int high
             std::swap(arr[i], arr[j]);
             obj->m_leftIndex = i;
             obj->m_pivotIndex = j;
-            obj->Draw();
+            {
+                std::lock_guard<std::mutex> lokc(obj->mtx);
+                obj->updateAvailable = true;
+            }
+            obj->cv.notify_all();
+            {
+                std::unique_lock<std::mutex> lock(obj->mtx);
+                obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+            }
         }
     }
     obj->m_leftIndex = i + 1;
     std::swap(arr[i + 1], arr[high]);
-    obj->Draw();
+    {
+        std::lock_guard<std::mutex> lokc(obj->mtx);
+        obj->updateAvailable = true;
+    }
+    obj->cv.notify_all();
+    {
+        std::unique_lock<std::mutex> lock(obj->mtx);
+        obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+    }
     return i + 1;
 }
 
@@ -300,7 +404,15 @@ void SortingAlgo::merge(Engine* obj, std::vector<int>& arr, int l, int m, int r)
             obj->m_rightIndex = j;
             arr[k++] = R[j++];
         }
-        obj->Draw();
+        {
+            std::lock_guard<std::mutex> lokc(obj->mtx);
+            obj->updateAvailable = true;
+        }
+        obj->cv.notify_all();
+        {
+            std::unique_lock<std::mutex> lock(obj->mtx);
+            obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+        }
     }
 
     while (i < n1)
@@ -308,14 +420,30 @@ void SortingAlgo::merge(Engine* obj, std::vector<int>& arr, int l, int m, int r)
         obj->m_leftIndex = k;
         obj->m_rightIndex = i;
         arr[k++] = L[i++];
-        obj->Draw();
+        {
+            std::lock_guard<std::mutex> lokc(obj->mtx);
+            obj->updateAvailable = true;
+        }
+        obj->cv.notify_all();
+        {
+            std::unique_lock<std::mutex> lock(obj->mtx);
+            obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+        }
     }
     while (j < n2)
     {
         obj->m_leftIndex = k;
         obj->m_rightIndex = j;
         arr[k++] = R[j++];
-        obj->Draw();
+        {
+            std::lock_guard<std::mutex> lokc(obj->mtx);
+            obj->updateAvailable = true;
+        }
+        obj->cv.notify_all();
+        {
+            std::unique_lock<std::mutex> lock(obj->mtx);
+            obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+        }
     }
 }
 
@@ -373,7 +501,15 @@ void SortingAlgo::countingSort(Engine* obj)
     {
         obj->m_leftIndex = i;
         obj->m_numbers[i] = output[i];
-        obj->Draw();
+        {
+            std::lock_guard<std::mutex> lokc(obj->mtx);
+            obj->updateAvailable = true;
+        }
+        obj->cv.notify_all();
+        {
+            std::unique_lock<std::mutex> lock(obj->mtx);
+            obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+        }
     }
 
     obj->resetColorIdx();
@@ -407,7 +543,15 @@ void SortingAlgo::countingSortByDigit(Engine* obj, std::vector<int>& arr, int ex
     {
         obj->m_rightIndex = i;
         arr[i] = output[i];
-        obj->Draw();
+        {
+            std::lock_guard<std::mutex> lokc(obj->mtx);
+            obj->updateAvailable = true;
+        }
+        obj->cv.notify_all();
+        {
+            std::unique_lock<std::mutex> lock(obj->mtx);
+            obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+        }
     }
 }
 
@@ -453,7 +597,15 @@ void SortingAlgo::bucketSort(Engine* obj)
             obj->m_rightIndex = j;
             obj->m_pivotIndex = idx;
             obj->m_numbers[idx++] = buckets[i][j];
-            obj->Draw();
+            {
+                std::lock_guard<std::mutex> lokc(obj->mtx);
+                obj->updateAvailable = true;
+            }
+            obj->cv.notify_all();
+            {
+                std::unique_lock<std::mutex> lock(obj->mtx);
+                obj->cv.wait(lock, [&] {return !obj->updateAvailable; });
+            }
         }
     }
 
