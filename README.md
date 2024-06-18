@@ -19,10 +19,10 @@ https://github.com/Shreyas9699/Sorting-Visualization/assets/63774467/625be771-16
   - Heap Sort
   - Quick Sort
   - Merge Sort
-  - Counting Sort (Positive Integers Only)
-  - Radix Sort (Positive Integers Only)
-  - Bucket Sort (Positive Integers Only)
-- Allows both positive and negative integers (flag to include negavtive integers)
+  - Counting Sort (*Positive Integers Only*)
+  - Radix Sort (*Positive Integers Only*)
+  - Bucket Sort (*Positive Integers Only*)
+- Allows both positive and negative integers (*flag to include negavtive integers*)
 - Adjustable number of elements to sort
 - Customizable window size
 - Real-time sorting process visualization
