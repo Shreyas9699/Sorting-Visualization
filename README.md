@@ -4,7 +4,8 @@ Sorting Visualization is a graphical application that visualizes various sorting
 
 ## Video Demonstration
 
-https://github.com/Shreyas9699/Sorting-Visualization/assets/63774467/289469fe-c1eb-44be-8ab2-78af8a15dab9
+https://github.com/Shreyas9699/Sorting-Visualization/assets/63774467/625be771-1627-437b-9098-31c8d469c0f7
+
 
 
 ## Features
